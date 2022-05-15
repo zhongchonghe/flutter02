@@ -1,26 +1,36 @@
 package com.example.flutter02;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.tencent.wework.api.IWWAPI;
 import com.tencent.wework.api.IWWAPIEventHandler;
 import com.tencent.wework.api.WWAPIFactory;
 import com.tencent.wework.api.model.BaseMessage;
 import com.tencent.wework.api.model.WWAuthMessage;
+import com.tencent.wework.api.model.WWMediaText;
+
+import org.jetbrains.annotations.NotNull;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
 /** Flutter02Plugin */
-public class Flutter02Plugin extends FlutterActivity implements FlutterPlugin, MethodCallHandler {
+public class Flutter02Plugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -30,16 +40,14 @@ public class Flutter02Plugin extends FlutterActivity implements FlutterPlugin, M
   private static final String APPID = "ww74b6271d7d4c7948";
   private static final String AGENTID = "1000007";
   private static final String SCHEMA = "wwauth74b6271d7d4c7948000007";
+  private Activity activity;
+  private static String CODE = "";
 
-  @Override
-  protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    iwwapi = WWAPIFactory.createWWAPI(this);
+  //  发起授权
+  private void wxLogin(Result result){
+
+    iwwapi = WWAPIFactory.createWWAPI(activity);
     iwwapi.registerApp(SCHEMA);
-
-  }
-//  发起授权
-  private void wxLogin(){
     final WWAuthMessage.Req req = new WWAuthMessage.Req();
     req.sch = SCHEMA;
     req.appId = APPID;
@@ -49,12 +57,15 @@ public class Flutter02Plugin extends FlutterActivity implements FlutterPlugin, M
       public void handleResp(BaseMessage resp) {
         WWAuthMessage.Resp rsp = (WWAuthMessage.Resp) resp;
         if (rsp.errCode == WWAuthMessage.ERR_CANCEL) {
-          Toast.makeText(Flutter02Plugin.this, "登录取消", Toast.LENGTH_SHORT).show();
+          Toast.makeText(activity, "登录取消", Toast.LENGTH_SHORT).show();
         }else if (rsp.errCode == WWAuthMessage.ERR_FAIL) {
-          Toast.makeText(Flutter02Plugin.this, "登录失败", Toast.LENGTH_SHORT).show();
+          Toast.makeText(activity, "登录失败", Toast.LENGTH_SHORT).show();
         } else if (rsp.errCode == WWAuthMessage.ERR_OK) {
-          Toast.makeText(Flutter02Plugin.this, "登录成功：" + rsp.code,
+          Toast.makeText(activity, "登录成功：" + rsp.code,
                   Toast.LENGTH_SHORT).show();
+//                  CODE=rsp.code;
+          result.success(rsp.code);
+
         }
       }
     });
@@ -72,7 +83,7 @@ public class Flutter02Plugin extends FlutterActivity implements FlutterPlugin, M
       result.success("Android " + android.os.Build.VERSION.RELEASE);
     }else if (call.method.equals("initSDK")){
 //      result.success("hello");
-      wxLogin();
+        wxLogin(result);
     }else {
       result.notImplemented();
     }
@@ -81,5 +92,25 @@ public class Flutter02Plugin extends FlutterActivity implements FlutterPlugin, M
   @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     channel.setMethodCallHandler(null);
+  }
+
+  @Override
+  public void onAttachedToActivity(@NonNull @NotNull ActivityPluginBinding binding) {
+    activity = binding.getActivity();
+  }
+
+  @Override
+  public void onDetachedFromActivityForConfigChanges() {
+
+  }
+
+  @Override
+  public void onReattachedToActivityForConfigChanges(@NonNull @NotNull ActivityPluginBinding binding) {
+
+  }
+
+  @Override
+  public void onDetachedFromActivity() {
+
   }
 }

@@ -10,7 +10,7 @@ class Flutter02 {
     final String? version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
-  static Future<void> get initSDK async {
-    await _channel.invokeMethod('initSDK');
+  static Future<String> get initSDK async {
+   return await _channel.invokeMethod('initSDK');
   }
 }

@@ -18,7 +18,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
 
-  String? _msg;
+  String? _msg="暂无";
 
   @override
   void initState() {
@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('msg: $_msg'),
+              Text('code: $_msg'),
               ElevatedButton(
                 onPressed: _loginQr,
                 child: Text("企业微信登录"),
@@ -74,8 +74,12 @@ class _MyAppState extends State<MyApp> {
     );
   }
   _loginQr() async {
-    print("aa");
     // initsdk();
-   await Flutter02.initSDK;
+    var msg = await Flutter02.initSDK;
+    setState(() {
+      _msg = msg;
+    });
+    print("------------");
+    print(_msg);
   }
 }
