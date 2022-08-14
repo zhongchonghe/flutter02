@@ -37,9 +37,9 @@ public class Flutter02Plugin implements FlutterPlugin, MethodCallHandler, Activi
   /// when the Flutter Engine is detached from the Activity
   private MethodChannel channel;
   private IWWAPI iwwapi;
-  private static final String APPID = "ww74b6271d7d4c7948";
-  private static final String AGENTID = "1000007";
-  private static final String SCHEMA = "wwauth74b6271d7d4c7948000007";
+  private static  String APPID = "";
+  private static  String AGENTID = "";
+  private static  String SCHEMA = "";
   private Activity activity;
   private static String CODE = "";
 
@@ -61,7 +61,7 @@ public class Flutter02Plugin implements FlutterPlugin, MethodCallHandler, Activi
         }else if (rsp.errCode == WWAuthMessage.ERR_FAIL) {
           Toast.makeText(activity, "登录失败", Toast.LENGTH_SHORT).show();
         } else if (rsp.errCode == WWAuthMessage.ERR_OK) {
-          Toast.makeText(activity, "登录成功：" + rsp.code,
+          Toast.makeText(activity, "登录成功",
                   Toast.LENGTH_SHORT).show();
 //                  CODE=rsp.code;
           result.success(rsp.code);
@@ -82,8 +82,11 @@ public class Flutter02Plugin implements FlutterPlugin, MethodCallHandler, Activi
     if (call.method.equals("getPlatformVersion")) {
       result.success("Android " + android.os.Build.VERSION.RELEASE);
     }else if (call.method.equals("initSDK")){
-//      result.success("hello");
-        wxLogin(result);
+      APPID = (String) call.argument("APPID");
+      AGENTID = (String) call.argument("AGENTID");
+      SCHEMA = (String) call.argument("SCHEMA");
+
+      wxLogin(result);
     }else {
       result.notImplemented();
     }
