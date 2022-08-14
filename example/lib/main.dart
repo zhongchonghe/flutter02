@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:flutter02/wechatAuth.dart';
 
-import 'package:flutter/services.dart';
-import 'package:flutter02/flutter02.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,8 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final wechatAuth = Flutter02();
+  final wechatAuth = WechatAuth();
   String? _msg = "暂无";
 
   @override

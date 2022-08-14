@@ -73,7 +73,7 @@ public class Flutter02Plugin implements FlutterPlugin, MethodCallHandler, Activi
   }
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "flutter02");
+    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "wechatAuth");
     channel.setMethodCallHandler(this);
   }
 

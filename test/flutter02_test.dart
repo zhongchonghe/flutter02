@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter02/flutter02.dart';
+import 'package:flutter02/wechatAuth.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('flutter02');
@@ -18,6 +18,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    expect(await Flutter02.platformVersion, '42');
+    expect(await WechatAuth.platformVersion, '42');
   });
 }

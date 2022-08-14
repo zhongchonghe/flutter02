@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-class Flutter02 {
-  static const MethodChannel _channel = MethodChannel('flutter02');
+class WechatAuth {
+  static const MethodChannel _channel = MethodChannel('wechatAuth');
 
   static Future<String?> get platformVersion async {
     final String? version = await _channel.invokeMethod('getPlatformVersion');
