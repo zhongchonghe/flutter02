@@ -39,5 +39,5 @@ android {
 dependencies {
     implementation fileTree(includes: ['*.jar'], dir: 'libs')
     implementation(name: 'lib_wwapi-2.0.12.11', ext: 'aar')
-    compile 'com.android.support:appcompat-v7:28.0.0'
+    implementation "com.android.support:appcompat-v7:28.0.0"
 }
